@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { FlatList, View, AsyncStorage } from 'react-native';
+import { FlatList, View } from 'react-native';
 import RecordingsListItem from './RecordingsListItem/RecordingsListItem';
 
 export default class RecordingsList extends Component {
@@ -7,20 +7,14 @@ export default class RecordingsList extends Component {
     data: []
   };
 
-  getRecordings = async () => {
-    const recordings = await AsyncStorage.getItem('recordings');
-    const recordingsJson = JSON.parse(recordings);
-    this.setState({ data: recordingsJson });
-  };
-
   render() {
-    const { data } = this.state;
+    const { data } = this.props;
 
     return (
       <View>
         <FlatList
           data={data}
-          extraData={this.state}
+          extraData={this.props}
           keyExtractor={({ index }) => index + ''}
           renderItem={({ item }) => <RecordingsListItem item={item} />}
         />

@@ -6,6 +6,7 @@
   "plugins": ["react"],
   "extends": ["eslint:recommended", "plugin:react/recommended"],
   "rules": {
-    // overrides
+    "no-console": "off",
+    "react/prop-types": "off"
   }
 }

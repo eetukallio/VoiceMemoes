@@ -5,17 +5,16 @@ import {
   Platform,
   PermissionsAndroid,
   StyleSheet,
-  TouchableOpacity,
   AsyncStorage,
   LayoutAnimation
 } from 'react-native';
 import { AudioRecorder, AudioUtils } from 'react-native-audio';
-import Icon from 'react-native-vector-icons/MaterialIcons';
 import { AnimatedCircularProgress } from 'react-native-circular-progress';
 import LinearGradient from 'react-native-linear-gradient';
 import { prepareRecordingPath } from '../../util/recorderConfig.js';
 import FileInformationModal from './FileInformationModal/FileInformationModal';
 import RecordButton from './RecordButton/RecordButton.js';
+import TitledButton from './TitledButton/TitledButton.js';
 const matchNonDigits = /\D/g;
 const MAX_DURATION = 30;
 
@@ -43,8 +42,7 @@ export default class AudioRecorderScreen extends Component {
       text: null,
       type: 'audio',
       duration: 0.0,
-      confidence: 0.0,
-      images: []
+      confidence: 0.0
     },
     modalVisible: false,
     loading: false,
@@ -105,7 +103,7 @@ export default class AudioRecorderScreen extends Component {
     });
   };
 
-  checkPermission() {
+  checkPermission = () => {
     if (Platform.OS !== 'android') {
       return Promise.resolve(true);
     }
@@ -122,31 +120,9 @@ export default class AudioRecorderScreen extends Component {
     ).then(result => {
       return result === true || result === PermissionsAndroid.RESULTS.GRANTED;
     });
-  }
-
-  renderButton = onPress => {
-    // return <Button title={title} onPress={onPress} disabled={disabled} />;
-    return (
-      <TouchableOpacity onPress={onPress}>
-        <Text style={styles.readyText}>Valmis</Text>
-      </TouchableOpacity>
-    );
   };
 
-  renderModal() {
-    return (
-      <FileInformationModal
-        finishRecording={this.finishRecording}
-        setModalVisible={this.setModalVisible}
-        filePath={this.state.fileData.filePath}
-        onChange={this.onNameChange}
-        modalVisible={this.state.modalVisible}
-        loading={this.state.loading}
-      />
-    );
-  }
-
-  async pause() {
+  pause = async () => {
     if (this.state.recording && Platform.Version < 24) {
       this.setState({
         paused: false,
@@ -165,9 +141,9 @@ export default class AudioRecorderScreen extends Component {
     } catch (error) {
       console.error(error);
     }
-  }
+  };
 
-  async resume() {
+  resume = async () => {
     if (!this.state.paused) {
       return;
     }
@@ -178,9 +154,9 @@ export default class AudioRecorderScreen extends Component {
     } catch (error) {
       console.error(error);
     }
-  }
+  };
 
-  async stop(forced) {
+  stop = async forced => {
     if (!forced && this.state.recording) {
       return;
     }
@@ -203,9 +179,9 @@ export default class AudioRecorderScreen extends Component {
     } catch (error) {
       console.error(error);
     }
-  }
+  };
 
-  async record() {
+  record = async () => {
     if (!this.state.hasPermission) {
       console.log('No permission');
       return;
@@ -235,7 +211,7 @@ export default class AudioRecorderScreen extends Component {
     } else {
       this.pause();
     }
-  }
+  };
 
   finishRecording = async (didSucceed, filePath) => {
     this.setState({
@@ -243,12 +219,12 @@ export default class AudioRecorderScreen extends Component {
     });
 
     try {
-      const retrievedFiles = await AsyncStorage.getItem('recordedFiles');
+      const retrievedFiles = await AsyncStorage.getItem('recordings');
 
       const files = retrievedFiles ? JSON.parse(retrievedFiles) : [];
 
       await AsyncStorage.setItem(
-        'recordedFiles',
+        'recordings',
         JSON.stringify([...files, this.state.fileData])
       );
     } catch (error) {
@@ -264,26 +240,6 @@ export default class AudioRecorderScreen extends Component {
     this.props.navigation.getParam('updateList')();
     this.props.navigation.goBack();
   };
-
-  renderProgressText() {
-    return (
-      <AnimatedCircularProgress
-        size={230}
-        width={15}
-        fill={((MAX_DURATION - this.state.currentTime) / MAX_DURATION) * 100}
-        tintColor={this.state.color}
-        onAnimationComplete={() => console.log('onAnimationComplete')}
-        backgroundColor={'transparent'}
-        rotation={0}
-      >
-        {() => (
-          <Text style={[styles.progressText, { color: this.state.color }]}>
-            {this.state.durationLeft}
-          </Text>
-        )}
-      </AnimatedCircularProgress>
-    );
-  }
 
   componentWillUnmount = () => {
     if (this.state.startedRecording && !this.state.finished) {
@@ -301,10 +257,29 @@ export default class AudioRecorderScreen extends Component {
         <View style={styles.controls}>
           <View />
           <View style={styles.progressContainer}>
-            {this.renderProgressText()}
+            <AnimatedCircularProgress
+              size={230}
+              width={15}
+              fill={
+                ((MAX_DURATION - this.state.currentTime) / MAX_DURATION) * 100
+              }
+              tintColor={this.state.color}
+              onAnimationComplete={() => console.log('onAnimationComplete')}
+              backgroundColor={'transparent'}
+              rotation={0}
+            >
+              {() => (
+                <Text
+                  style={[styles.progressText, { color: this.state.color }]}
+                >
+                  {this.state.durationLeft}
+                </Text>
+              )}
+            </AnimatedCircularProgress>
           </View>
 
           <View style={styles.bottomRow}>
+            <View style={{ width: 60 }} />
             {!this.state.finished && (
               <RecordButton
                 onPress={() => this.record()}
@@ -312,16 +287,21 @@ export default class AudioRecorderScreen extends Component {
               />
             )}
             {this.state.startedRecording && !this.state.recording ? (
-              this.renderButton(() => {
-                this.stop();
-              })
+              <TitledButton onPress={this.stop} title="Done" />
             ) : (
               <View style={{ width: 60 }} />
             )}
           </View>
         </View>
 
-        {this.renderModal()}
+        <FileInformationModal
+          finishRecording={this.finishRecording}
+          setModalVisible={this.setModalVisible}
+          filePath={this.state.fileData.filePath}
+          onChange={this.onNameChange}
+          modalVisible={this.state.modalVisible}
+          loading={this.state.loading}
+        />
       </LinearGradient>
     );
   }
@@ -419,11 +399,5 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     width: '90%',
     height: 130
-  },
-  readyText: {
-    paddingVertical: 10,
-    fontSize: 20,
-    color: 'white',
-    fontFamily: 'Circular Std'
   }
 });
