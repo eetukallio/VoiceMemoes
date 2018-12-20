@@ -20,7 +20,10 @@ const MAX_DURATION = 30;
 
 export default class AudioRecorderScreen extends Component {
   static navigationOptions = {
-    title: 'New recording'
+    title: 'New recording',
+    headerStyle: { backgroundColor: '#00a9ff' },
+    headerTintColor: '#fff',
+    headerTitleStyle: { fontWeight: 'bold' }
   };
 
   state = {
@@ -253,7 +256,7 @@ export default class AudioRecorderScreen extends Component {
 
   render() {
     return (
-      <LinearGradient colors={['#00efd1', '#489ddd']} style={styles.container}>
+      <LinearGradient colors={['#00a9ff', '#015a87']} style={styles.container}>
         <View style={styles.controls}>
           <View />
           <View style={styles.progressContainer}>

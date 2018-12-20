@@ -2,11 +2,12 @@ import React, { Component } from 'react';
 import { View, StyleSheet, AsyncStorage } from 'react-native';
 import VMActionButton from '../generic/VMActionButton';
 import RecordingsList from './RecordingsList/RecordingsList';
+import LinearGradient from 'react-native-linear-gradient';
 
 export default class MainView extends Component {
   static navigationOptions = {
     title: 'Home',
-    headerStyle: { backgroundColor: '#f4511e' },
+    headerStyle: { backgroundColor: '#00a9ff' },
     headerTintColor: '#fff',
     headerTitleStyle: { fontWeight: 'bold' }
   };
@@ -28,9 +29,13 @@ export default class MainView extends Component {
     const { data } = this.state;
 
     return (
-      <View style={styles.container}>
+      <LinearGradient colors={['#00a9ff', '#015a87']} style={styles.container}>
         <View style={styles.contentContainer}>
-          <RecordingsList data={data} />
+          <RecordingsList
+            data={data}
+            navigation={navigation}
+            updateList={this.getRecordings}
+          />
         </View>
         <VMActionButton
           buttonColor={'rgba(231,76,60,1)'}
@@ -38,7 +43,7 @@ export default class MainView extends Component {
             navigation.navigate('Recording', { updateList: this.getRecordings })
           }
         />
-      </View>
+      </LinearGradient>
     );
   }
 }
