@@ -11,7 +11,7 @@ export default class RecordButton extends Component {
         <LinearGradient
           start={{ x: 0.25, y: 0.0 }}
           end={{ x: 0.5, y: 0.5 }}
-          colors={['#00efd1', '#489ddd']}
+          colors={['#00a9ff', '#015a87']}
           style={styles.recordContainer}
         >
           {!active ? (
@@ -28,14 +28,14 @@ export default class RecordButton extends Component {
 const styles = StyleSheet.create({
   button: {
     padding: 20,
-    marginBottom: 0
+    marginBottom: 0,
   },
 
   record: {
     backgroundColor: 'red',
     borderRadius: 50,
     width: 60,
-    height: 60
+    height: 60,
   },
   recordContainer: {
     justifyContent: 'center',
@@ -44,11 +44,11 @@ const styles = StyleSheet.create({
     borderColor: 'white',
     borderWidth: 3,
     borderRadius: 50,
-    padding: 10
+    padding: 10,
   },
   pause: {
     fontSize: 60,
-    color: 'white'
+    color: 'white',
   },
   buttonContainer: {
     height: 60,
@@ -57,6 +57,6 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: 'white',
     justifyContent: 'center',
-    alignItems: 'center'
-  }
+    alignItems: 'center',
+  },
 });
