@@ -4,7 +4,7 @@ import RecordingsListItem from './RecordingsListItem/RecordingsListItem';
 
 export default class RecordingsList extends Component {
   state = {
-    data: []
+    data: [],
   };
 
   render() {
@@ -33,9 +33,9 @@ export default class RecordingsList extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    width: '100%'
+    width: '97%',
   },
   list: {
-    flex: 1
-  }
+    flex: 1,
+  },
 });

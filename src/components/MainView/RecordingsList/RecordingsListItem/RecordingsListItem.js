@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { Text, TouchableOpacity, StyleSheet, View } from 'react-native';
 import { parseDate, parseDuration } from '../../../../util/util';
 
 export default class RecordingsListItem extends Component {
@@ -12,9 +12,11 @@ export default class RecordingsListItem extends Component {
           navigation.navigate('RecordingDetails', { item, updateList })
         }
       >
-        <Text> {item.name} </Text>
-        <Text> {parseDuration(item.duration)} </Text>
-        <Text> {parseDate(item.date)} </Text>
+        <Text style={styles.title}>{item.name}</Text>
+        <View style={styles.dataContainer}>
+          <Text style={styles.dataText}>{parseDuration(item.duration)}</Text>
+          <Text style={styles.dataText}>{parseDate(item.date)}</Text>
+        </View>
       </TouchableOpacity>
     );
   }
@@ -26,7 +28,22 @@ const styles = StyleSheet.create({
     width: '100%',
     marginVertical: 5,
     alignItems: 'flex-start',
-    justifyContent: 'center',
-    backgroundColor: 'white'
-  }
+    justifyContent: 'space-between',
+    backgroundColor: 'white',
+    borderRadius: 2,
+    padding: 12,
+  },
+  title: {
+    fontSize: 23,
+    color: '#00a9ff',
+  },
+  dataText: {
+    color: '#3f3f3f',
+  },
+  dataContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '100%',
+    marginTop: 0,
+  },
 });

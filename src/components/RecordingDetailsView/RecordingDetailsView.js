@@ -8,7 +8,7 @@ import {
   ActivityIndicator,
   ScrollView,
   TouchableOpacity,
-  Slider
+  Slider,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import Sound from 'react-native-sound';
@@ -22,7 +22,7 @@ export default class RecordingDetailsView extends Component {
     title: 'Memo',
     headerStyle: { backgroundColor: '#00a9ff' },
     headerTintColor: '#fff',
-    headerTitleStyle: { fontWeight: 'bold' }
+    headerTitleStyle: { fontWeight: 'bold' },
   };
 
   sound = null;
@@ -35,7 +35,7 @@ export default class RecordingDetailsView extends Component {
     currentTime: 0.0,
     loading: false,
     text: '',
-    name: ''
+    name: '',
   };
 
   componentDidMount = () => {
@@ -44,7 +44,7 @@ export default class RecordingDetailsView extends Component {
       date: new Date(),
       text: 'Loading...',
       type: null,
-      duration: 0.0
+      duration: 0.0,
     });
 
     this.sound = new Sound(item.filePath, '', error => {
@@ -56,7 +56,7 @@ export default class RecordingDetailsView extends Component {
     this.setState({
       file: item,
       text: item.text,
-      name: item.name
+      name: item.name,
     });
 
     if (item.type === 'audio' && !item.text) {
@@ -73,7 +73,7 @@ export default class RecordingDetailsView extends Component {
       const base64Audio = await RNFS.readFile(item.filePath, 'base64');
 
       this.setState({
-        loading: true
+        loading: true,
       });
 
       const url = ENV.API_ENDPOINT;
@@ -83,15 +83,15 @@ export default class RecordingDetailsView extends Component {
         url,
         data: {
           audio: {
-            content: base64Audio
+            content: base64Audio,
           },
           config: {
             enableWordTimeOffsets: true,
             encoding: 'amr',
             languageCode: 'fi-FI',
-            sampleRateHertz: 8000
-          }
-        }
+            sampleRateHertz: 8000,
+          },
+        },
       };
 
       axios(config)
@@ -114,7 +114,7 @@ export default class RecordingDetailsView extends Component {
           this.setState({
             loading: false,
             file: updatedItem,
-            text
+            text,
           });
 
           this.updateItems(updatedItem, text);
@@ -165,7 +165,7 @@ export default class RecordingDetailsView extends Component {
     this.sound.getCurrentTime(seconds => {
       if (this.interval) {
         this.setState({
-          currentTime: seconds
+          currentTime: seconds,
         });
       }
     });
@@ -176,7 +176,7 @@ export default class RecordingDetailsView extends Component {
       if (success) {
         this.setState({
           playing: false,
-          currentTime: 0
+          currentTime: 0,
         });
       } else {
         console.log('playback failed due to audio decoding errors');
@@ -191,14 +191,14 @@ export default class RecordingDetailsView extends Component {
       LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
       this.setState({
         playing: true,
-        startedPlayback: true
+        startedPlayback: true,
       });
       this.startPlaying();
     } else {
       this.sound.pause();
       LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
       this.setState({
-        playing: false
+        playing: false,
       });
       this.stopInterval();
     }
@@ -221,7 +221,7 @@ export default class RecordingDetailsView extends Component {
         contentContainerStyle={{
           width: '100%',
           height: '100%',
-          alignItems: 'center'
+          alignItems: 'center',
         }}
         style={[styles.textArea]}
       >
@@ -231,7 +231,7 @@ export default class RecordingDetailsView extends Component {
               flex: 1,
               justifyContent: 'center',
               alignItems: 'center',
-              marginTop: 50
+              marginTop: 50,
             }}
           >
             <ActivityIndicator size="large" color={'blue'} />
@@ -260,7 +260,7 @@ export default class RecordingDetailsView extends Component {
         <View style={styles.controls}>
           <TouchableOpacity onPress={this.play}>
             <LinearGradient
-              colors={['#00efd1', '#489ddd']}
+              colors={['#00a9ff', '#015a87']}
               style={styles.playButton}
             >
               {!this.state.playing ? (
@@ -326,48 +326,48 @@ export default class RecordingDetailsView extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    justifyContent: 'space-between',
+    justifyContent: 'flex-start',
     alignItems: 'center',
-    flex: 1
+    flex: 1,
   },
   playIcon: {
     fontSize: 70,
-    color: 'white'
+    color: 'white',
   },
   slider: {
-    width: '75%'
+    width: '75%',
   },
   titleLabel: {
     fontSize: 18,
     color: 'white',
-    fontWeight: 'bold'
+    fontWeight: 'bold',
   },
   controls: {
-    alignItems: 'center'
+    alignItems: 'center',
   },
   textArea: {
-    backgroundColor: '#c4e9e5',
+    backgroundColor: '#eaf0f9',
     maxHeight: 250,
     width: '90%',
     padding: 10,
     marginTop: 30,
     borderRadius: 2,
     marginBottom: 10,
-    elevation: 0
+    elevation: 0,
   },
   transcript: {
     fontFamily: 'Circular Std',
-    color: 'blue',
+    color: 'black',
     fontSize: 16,
     padding: 0,
     height: '100%',
-    width: '100%'
+    width: '100%',
   },
   nameLabel: {
     fontFamily: 'Circular Std',
-    color: 'blue',
+    color: 'white',
     fontSize: 20,
-    padding: 0
+    padding: 0,
   },
   nameLabelEdit: {
     fontFamily: 'Circular Std',
@@ -376,7 +376,7 @@ const styles = StyleSheet.create({
     padding: 5,
     backgroundColor: '#c4e9e5',
     borderRadius: 3,
-    width: '90%'
+    width: '90%',
   },
   icon: {
     fontSize: 30,
@@ -384,26 +384,26 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     textShadowColor: 'rgba(0,0,0,.2)',
     shadowRadius: 3,
-    textShadowOffset: { width: 2, height: 1 }
+    textShadowOffset: { width: 2, height: 1 },
   },
   sliderRow: {
     flexDirection: 'row',
     marginVertical: 30,
-    width: '100%'
+    width: '100%',
   },
   dataText: {
     fontSize: 14,
-    color: 'white'
+    color: 'white',
   },
   info: {
     marginHorizontal: 30,
     fontSize: 20,
-    color: 'blue'
+    color: 'blue',
   },
   noTextContainer: {
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   addWordInput: {
     backgroundColor: '#c4e9e5',
@@ -411,10 +411,10 @@ const styles = StyleSheet.create({
     borderRadius: 2,
     alignSelf: 'flex-end',
     elevation: 0,
-    paddingHorizontal: 10
+    paddingHorizontal: 10,
   },
   iconContainer: {
-    alignSelf: 'flex-end'
+    alignSelf: 'flex-end',
   },
   playButton: {
     justifyContent: 'center',
@@ -424,6 +424,6 @@ const styles = StyleSheet.create({
     borderRadius: 90,
     borderWidth: 3,
     borderColor: 'white',
-    marginTop: 30
-  }
+    marginTop: 30,
+  },
 });
